@@ -32,7 +32,7 @@ def panic():
 def listen():
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 	try:
-		s.bind(("",args.port)) #listen on the ports :)
+		s.bind(("",args.port))
 	except:
 		print("Binding socket Failed. Got root?")
 		sys.exit()
@@ -46,8 +46,11 @@ def hash():
 	return hash
 
 def main():
-#	if parser.paranoid:
-	print (hash())
+	if listen()== 1:
+		print("PANIC PANIC PANIC")
 
-if listen()== 1:
-	print("PANIC PANIC PANIC")
+		''' When in trouble, 
+			when in doubt,
+			 run in circles,
+			  scream and shout'''
+main()
