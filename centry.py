@@ -1,7 +1,8 @@
 #!/usr/bin/python3
-
+import sys
 import argparse
 import hashlib
+import socket
 
 parser = argparse.ArgumentParser(prog="Centry",description='Pythonic Panic Program for the Security Minded',
                                  epilog='Version 0.1')
@@ -9,7 +10,7 @@ parser.add_argument("-d", "--daemon", help="Run as a daemon in the background", 
 parser.add_argument("--paranoid", help='Activates paranoid mode. Default: Off', action='store_true') 
 #TODO: Elaborate on expalantion of paranoid mode
 parser.add_argument("-k", "--key", help="Require key to start panic sequence",)
-parser.add_argument('-p','--port', help='Specify port to listen on.')
+parser.add_argument('-p','--port', help='Specify port to listen on.',type=int)
 args = parser.parse_args()
 
 def panic():
@@ -22,11 +23,23 @@ def panic():
 		os.popen("sdmem -llf")
 		os.popen("sswap")                                  # need parameters
 
-	if parser.paranoid:
+	if args.paranoid:
 		os.popen("echo 1 > /proc/sys/kernel/sysrq")        # Enables system event overrides from commandline
 		os.popen("echo o > /proc/sysrq-trigger")           #Forces shutdown. Equivilent to holding down power button
 	else:
 		os.popen("shutdown -P now")
+
+def listen():
+	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+	try:
+		s.bind(("",args.port)) #listen on the ports :)
+	except:
+		print("Binding socket Failed. Got root?")
+		sys.exit()
+	s.listen(1)
+	conn, addr = s.accept()
+	return 1
+	
 
 def hash():
 	hash = hashlib.sha256(args.key.encode('UTF-8')).hexdigest()
@@ -35,5 +48,6 @@ def hash():
 def main():
 #	if parser.paranoid:
 	print (hash())
-main()
-		
+
+if listen()== 1:
+	print("PANIC PANIC PANIC")
