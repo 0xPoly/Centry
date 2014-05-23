@@ -16,15 +16,15 @@ def panic():
 	#TODO: Implement timeout
 	if os.name == 'nt':                                        # Panic options for Windows Machines
 		os.popen("truecrypt.exe /wipecache")
-	elif os.name == 'posix':                                   #Panic Options for Linux and MacOS
-		os.popen("truecrypt /wipecache")                   #Wipes all passwords and keyfiles from truecrypt cache 
-                                                                   #TODO:IMPORTANT does this lock disks?
-		os.popen("sdmem -llf")                             #Securly wipes the RAM with one run of all zeros.
-		os.popen("swapoff")                                #Turns off swap.
+	elif os.name == 'posix':                                   # Panic Options for Linux and MacOS
+		os.popen("truecrypt /wipecache")                   # Wipes all passwords and keyfiles from truecrypt cache 
+                                                                   #TODO:IMPORTANT does this lock disks? Mac?
+		os.popen("sdmem -llf")
+		os.popen("sswap")                                  # need parameters
 
 	if parser.paranoid:
-		os.popen("echo 1 > /proc/sys/kernel/sysrq")        #Enables system event overrides from commandline
-		os.popen("echo o > /proc/sysrq-trigger")           #Forces shutdown. Equivilent to holding down power button.
+		os.popen("echo 1 > /proc/sys/kernel/sysrq")        # Enables system event overrides from commandline
+		os.popen("echo o > /proc/sysrq-trigger")           #Forces shutdown. Equivilent to holding down power button
 	else:
 		os.popen("shutdown -P now")
 
