@@ -23,4 +23,4 @@ TODO
 
 ## Contributors ##
 
-- OxPoly - [twitter](https://twitter.com/OxPoly)
+- 0xPoly - [twitter](https://twitter.com/0xPoly)
