@@ -1,4 +1,4 @@
-Centry
+Centry v0.1
 ======
 ## Introduction ##
 Centry is a panic button intended to protect users against Cold Boot Attacks, Direct Memory Access and other forms of live key retrival. Once installed on a computer, Centry employs extensive methods. Centry is most effective when deployed on systems with Full Disk Encryption.
@@ -21,6 +21,11 @@ Centry is a panic button intended to protect users against Cold Boot Attacks, Di
 ## Installation ##
 TODO
 
-## Contributors ##
+## Contributors and License ##
 
+Developed by:
 - 0xPoly - [twitter](https://twitter.com/0xPoly)
+
+This is a free, open source program distirbuted under the [GNU General Public License](/LICENSE)
+
+
