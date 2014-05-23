@@ -4,8 +4,7 @@ import argparse
 import hashlib
 import socket
 
-parser = argparse.ArgumentParser(prog="Centry",description='Pythonic Panic Program for the Security Minded',
-                                 epilog='Version 0.1')
+parser = argparse.ArgumentParser(prog="Centry",description='Pythonic Panic Program for the Security Minded',epilog="Version 0.1")
 parser.add_argument("-d", "--daemon", help="Run as a daemon in the background", action='store_true')
 parser.add_argument("--paranoid", help='Activates paranoid mode. Default: Off', action='store_true') 
 #TODO: Elaborate on expalantion of paranoid mode
@@ -51,6 +50,6 @@ def main():
 
 		''' When in trouble, 
 			when in doubt,
-			 run in circles,
+			 run Centry,
 			  scream and shout'''
 main()
