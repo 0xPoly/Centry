@@ -23,11 +23,11 @@ def panic():
 		os.popen("sdmem -llf")
 		os.popen("sswap")                                  # need parameters
 
-	if args.paranoid:
-		os.popen("echo 1 > /proc/sys/kernel/sysrq")        # Enables system event overrides from commandline
-		os.popen("echo o > /proc/sysrq-trigger")           #Forces shutdown. Equivilent to holding down power button
-	else:
-		os.popen("shutdown -P now")
+		if args.paranoid:
+			os.popen("echo 1 > /proc/sys/kernel/sysrq")
+			os.popen("echo o > /proc/sysrq-trigger")           #Forces shutdown.
+		else:
+			os.popen("shutdown -P now")
 
 def listen():
 	s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
