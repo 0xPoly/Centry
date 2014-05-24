@@ -21,18 +21,18 @@ Centry is a panic button intended to protect users against Cold Boot Attacks, Di
 
 ## Installation ##
 ####Windows####
-Simply download and install centry.exe
+Simply download and install 'centry.exe'
 
-SHA256: xxxx
+     SHA256: xxxx
 ####Linux####
-For significantly improved security install the "secure-delete" package. On Ubuntu/Debian:
+For significantly improved security install the 'secure-delete' package. On Ubuntu/Debian:
 
-"sudo apt-get install secure-delete"
+     "sudo apt-get install secure-delete"
 
 Then download and run Centry as root:
 
-"git clone https://github.com/0xPoly/Centry.git"
-"sudo python centry.py"
+     "git clone https://github.com/0xPoly/Centry.git"
+     "sudo python centry.py"
 ####Mac OS####
 TODO
 
