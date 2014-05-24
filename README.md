@@ -9,7 +9,6 @@ Centry is a panic button intended to protect users against Cold Boot Attacks, Di
   * Lock the screen
   * Unmount all Truecrypt disks and clear the password/keyfile cache
   * Umount all crypto disks under UNIX-like systems
-  * Lock password manager
   * Write zeros to RAM using sdmem
   * Clear out swap file using sswap
   * Force an ACPI shutdown (equivilent holding down the power button)
