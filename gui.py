@@ -1,32 +1,42 @@
 #!/usr/bin/python3
+from tkinter import *
 
-import tkinter as tk
+def fire():
+  print("FIREIFREFIRE")
+app = Tk()
 
-class Application(tk.Frame):
-    def __init__(self, master=None):
-        tk.Frame.__init__(self, master)
-        self.pack()
-        self.createWidgets()
+mainframe = Frame()
 
-    def createWidgets(self):
-        self.title=tk.Label(self)
-        self.title["text"] = "Centry"
-        self.title["font"] = ('',26,'bold')
-        self.title.pack(side='top')
-        self.hi_there = tk.Button(self)
-#        self.hi_there["text"] = "Hello World\n(click me)"
-#        self.hi_there["command"] = self.say_hi
-#        self.hi_there.pack(side="right")
+header = Frame(mainframe)
+title=Label(header)
+title["text"] = "Centry"
+title["font"] = ('',32,'bold')
+title.pack(side="left", anchor='e',padx=90)
+photo = PhotoImage(file="settings.gif")
+settings = Button(header)
+settings["image"] = photo
+settings.pack(side="right",fill='both', anchor="e",pady=5,padx=5)
+header.pack(side="top",fill=X)
 
-        self.QUIT = tk.Button(self, text="PANIC",font=('',32,''), bg="red", fg="black",
-                                            command=root.destroy)
-        self.QUIT.pack(side="bottom")
+body = Frame(mainframe)
 
-    def say_hi(self):
-        print("hi there, everyone!")
+separator = Frame(body,height=2, bd=1, relief=SUNKEN)
+separator.pack(side='top',fill=X, padx=5, pady=5)
 
-root = tk.Tk()
-app = Application(master=root)
-app.master.title("Centry Panic Systems")
-app.master.geometry("400x300")
+status=Label(body)
+status["text"] = "Status: Armed (Paranoid)"
+status['font'] = ('', 14,'')
+status.pack(fill="both")
+body.pack(fill="both")
+
+mainframe.pack(side='top', fill="both")
+
+panicf = Frame()
+panic = Button(panicf, text="PANIC",font=('',28,''), bg="#db0303", fg="black",activebackground="red", command=fire)
+panic.pack(side="bottom", fill='both')
+panicf.pack(fill=X, padx=5, pady=5,side='bottom')
+
+app.title("Centry")
+app.geometry("400x165")
+app.iconbitmap("@icon.xbm")
 app.mainloop()

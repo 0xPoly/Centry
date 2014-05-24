@@ -3,7 +3,7 @@ import sys
 import argparse
 import hashlib
 import socket
-
+#TODO: Implement ECC restart option
 parser = argparse.ArgumentParser(prog="Centry",description='Pythonic Panic Program for the Security Minded',epilog="Version 0.1")
 parser.add_argument("-d", "--daemon", help="Run as a daemon in the background", action='store_true')
 parser.add_argument("--paranoid", help='Activates paranoid mode. Default: Off', action='store_true') 
