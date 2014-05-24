@@ -6,6 +6,7 @@ import socket
 import select
 import os
 import csv
+import gui
 
 parser = argparse.ArgumentParser(prog="Centry",description="""Panic Button for
                                     the Security Minded""",epilog="Version 0.1")
@@ -32,23 +33,44 @@ def configsave():
     for key, val in panic_options.items():
       w.writerow([key, val])
     return panic_options
+
+def panic():
   #TODO: Implement timeout
-  if os.name == 'nt':                       # Panic options for Windows
-    os.popen("truecrypt.exe /wipecache")
-    winpath = os.environ["windir"]
-    os.system(winpath + r'\system32\rundll32 user32.dll, LockWorkStation')
-  elif os.name == 'posix':                  # Panic Options for Linux and MacOS
-    os.popen("truecrypt /wipecache")        # Wipes passwds/keyfiles in TC cache 
-                                            #TODO: does this lock disks? Mac?
-    os.popen("sdmem -llf")
-    os.popen('swapoff')        # Avoid crash due to random overwrititng of swap
-    os.popen("sswap")          
-    os.popen("gnome-screensaver-command -lock")
-  if args.paranoid:
-    os.popen("echo 1 > /proc/sys/kernel/sysrq")
-    os.popen("echo o > /proc/sysrq-trigger")  #Forces shutdown.
-  else:
-    os.popen("shutdown -P now")
+  if os.name == 'nt':
+    if panic_options['truecrypt']:       # Panic options for Windows
+      os.popen("truecrypt.exe /wipecache")
+
+    if panic_options['screenlock']:
+      winpath = os.environ["windir"]
+      os.system(winpath + r'\system32\rundll32 user32.dll, LockWorkStation')
+    if panic_options['ecc']:
+      os.popen("shutdown /r /f /t 0")
+    else:
+      os.popen("shutdown /s /f /t 0")
+
+  elif os.name == 'posix':
+    if panic_options['truecrypt']:           
+      os.popen("truecrypt /wipecache")
+     
+    if panic_options['ram']:            #TODO: does this lock disks? Mac?
+      os.popen("sdmem -llf")
+
+    if panic_options["swap"]:
+      os.popen('swapoff')
+      os.popen("sswap")
+
+    if panic_options['screenlock']:          
+      os.popen("gnome-screensaver-command -lock")
+
+    if panic_options['hardshutdown']:
+      if panic_opptions['ecc']:
+        os.popen("echo 1 > /proc/sys/kernel/sysrq")
+        os.popen("echo b > /proc/sysrq-trigger")
+      else:
+        os.popen("echo 1 > /proc/sys/kernel/sysrq")
+        os.popen("echo o > /proc/sysrq-trigger")
+    else:
+      os.popen("shutdown -P now")
 
 def listen():
   s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -80,25 +102,18 @@ def broadcast_panic():
   s.sendto(hash(), ("<broadcast>", 9999 ) )
   s.close()
 
-def wait():
-  threading.Thread(target = listen).start()
-  threading.Thread(target = listenbcast).start()
-  while True:
-    if threading.activeCount() < 2:
-      break
-  return 1
- 
 def hash():
   hash = hashlib.sha256(args.key.encode('UTF-8')).hexdigest()
   return hash
 
 def main():
-  if wait() == 1:
-    print("PANIC PANIC PANIC")
+  gui.start()
+#  if wait() == 1:
+#    print("PANIC PANIC PANIC")
 
 #             When in trouble, 
 #		when in doubt,
 #		 run Centry,
 #		  scream and shout
 
-print(configsave())
+main()
