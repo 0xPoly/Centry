@@ -1,12 +1,12 @@
 #!/usr/bin/python3
-import sys
+import sys, os
 import argparse
 import hashlib
 import socket
 import select
-import os
 import csv
 import gui
+import multiprocessing
 
 parser = argparse.ArgumentParser(prog="Centry",description="""Panic Button for
                                     the Security Minded""",epilog="Version 0.1")
@@ -16,7 +16,6 @@ parser.add_argument("--paranoid", help='Activates paranoid mode. Default: Off',
                                                             action='store_true') 
 parser.add_argument("-e","--ecc", help="""Specify this option if running on a
                                          system with Error Correcting Memory""")
-#TODO: Elaborate on expalantion of paranoid mode
 parser.add_argument("-k", "--key", help="Require key to start panic sequence",)
 parser.add_argument('-p','--port', help='Specify port to listen on.',type=int)
 args = parser.parse_args()
@@ -37,7 +36,7 @@ def configsave():
 def panic():
   #TODO: Implement timeout
   if os.name == 'nt':
-    if panic_options['truecrypt']:       # Panic options for Windows
+    if panic_options['truecrypt']:
       os.popen("truecrypt.exe /wipecache")
 
     if panic_options['screenlock']:
@@ -72,16 +71,16 @@ def panic():
     else:
       os.popen("shutdown -P now")
 
-def listen():
+def listentcp():
   s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
   try:
-    s.bind(("",args.port))
+    s.bind(("",80))
   except:
     print("Binding socket Failed. Got root?")
     sys.exit()
   s.listen(1)
   conn, addr = s.accept()
-  return 1
+  print("TCP PANIC PANIC PANIC")
 
 def listenbcast():
   bufferSize=256  
@@ -92,14 +91,15 @@ def listenbcast():
   while True:
     result = select.select([s],[],[])
     msg = result[0][0].recv(bufferSize)
-    print(msg)
-    break
-  return 1
-
+    if msg == b'panic\n':
+      print("UDP PANIC PANIC PANIC")
+      break
+    else:
+      print("Incorrect Signal Recieved: " + str(msg))
 def broadcast_panic():
   s = socket.socket( socket.AF_INET, socket.SOCK_DGRAM )
   s.setsockopt( socket.SOL_SOCKET, socket.SO_BROADCAST, 1 )
-  s.sendto(hash(), ("<broadcast>", 9999 ) )
+  s.sendto(hash(), ("<broadcast>", 29899 ) )
   s.close()
 
 def hash():
@@ -107,9 +107,9 @@ def hash():
   return hash
 
 def main():
-  gui.start()
-#  if wait() == 1:
-#    print("PANIC PANIC PANIC")
+  w = multiprocessing.Process(target = gui.start).start()
+  m = multiprocessing.Process(target = listenbcast).start()
+  r = multiprocessing.Process(target = listen).start()
 
 #             When in trouble, 
 #		when in doubt,
