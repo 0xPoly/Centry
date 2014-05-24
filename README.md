@@ -4,21 +4,36 @@ Centry v0.1
 Centry is a panic button intended to protect users against Cold Boot Attacks, Direct Memory Access and other forms of live key retrival. Centry is most effective when deployed on systems with Full Disk Encryption. The panic function can be activated through the GUI or through a network request (through browser, smartphone, etc). Upon recieving the panic instruction, Centry will attempt to remove sensitive keys from memory, securily overwrite the RAM and then force a shutdown.
 ![screenshot](/screenshot.png)
 ## Features ##
-* User-friendly GUI interface, 
-* Upon hitting the Panic Button, Centry will:
+* User-friendly GUI interface, along with CLI for scripting
+* When in panic mode, Centry can:
   * Lock the screen
   * Unmount all Truecrypt disks and clear the password/keyfile cache
   * Umount all crypto disks under UNIX-like systems
   * Lock password manager
-  * Write zeros to RAM
-  * Clear out swap file
-  * Force an ACPI shutdown (like holding down the power button)
+  * Write zeros to RAM using sdmem
+  * Clear out swap file using sswap
+  * Force an ACPI shutdown (equivilent holding down the power button)
   * Propogate the panic signal to all other nodes in the network
 * Garanteed system shutdown within 5 seconds of recieving the panic signal.
-* Compatable with Windows, Linux and Mac OS
-* 100% Python Code
+* Settings to improve security on ECC-enabled systems
+* Extensively customizable
+* Compatable with Windows, Linux and Mac OS; with significantly more security in Linux.
 
 ## Installation ##
+####Windows####
+Simply download and install centry.exe
+
+SHA256: xxxx
+####Linux####
+For significantly improved security install the "secure-delete" package. On Ubuntu/Debian:
+
+"sudo apt-get install secure-delete"
+
+Then download and run Centry as root:
+
+"git clone https://github.com/0xPoly/Centry.git"
+"sudo python centry.py"
+####Mac OS####
 TODO
 
 ## Contributors and License ##
