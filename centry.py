@@ -1,24 +1,27 @@
 #!/usr/bin/python3
+#
+#     When in Fear,
+#       When in Doubt,
+#         Run Centry,
+#          Scream and Shout
+#
+#               _( }
+#      -=  _  <<  \
+#         `.\__/`/\\
+#    -=     '--'\\  `
+#         -=    //
+#               \)
+#
+#    Licensed under GPL v3 by 0xPoly
+#       Inspired by panic_bcast
+
 import sys, os
-import argparse
 import hashlib
 import socket
 import select
 import csv
 import multiprocessing
 from tkinter import *
-
-parser = argparse.ArgumentParser(prog="Centry",description="""Panic Button for
-                                    the Security Minded""",epilog="Version 0.1")
-parser.add_argument("-d", "--daemon", help="Run as a daemon in the background",
-                                                            action='store_true')
-parser.add_argument("--paranoid", help='Activates paranoid mode. Default: Off',
-                                                            action='store_true') 
-parser.add_argument("-e","--ecc", help="""Specify this option if running on a
-                                         system with Error Correcting Memory""")
-parser.add_argument("-k", "--key", help="Require key to start panic sequence",)
-parser.add_argument('-p','--port', help='Specify port to listen on.',type=int)
-args = parser.parse_args()
 
 def configsave():
   if os.path.isfile('centry.conf'):
@@ -44,6 +47,9 @@ def toggle(option):
    for key, val in panic.items():
      w.writerow([key, val])
    update_settings()
+
+def temp_panic():
+   print("PANIC PANIC PANIC")
 
 def panic():
   #TODO: Implement timeout
@@ -91,7 +97,7 @@ def listentcp():
     sys.exit()
   s.listen(1)
   conn, addr = s.accept()
-  print("TCP PANIC PANIC PANIC")
+  temp_panic()
 
 def listenbcast():
   bufferSize=256  
@@ -103,7 +109,7 @@ def listenbcast():
     result = select.select([s],[],[])
     msg = result[0][0].recv(bufferSize)
     if msg == b'panic\n':
-      print("UDP PANIC PANIC PANIC")
+      temp_panic()
       break
     else:
       print("Incorrect Signal Recieved: " + str(msg))
@@ -116,9 +122,6 @@ def broadcast_panic():
 def hash():
   hash = hashlib.sha256(args.key.encode('UTF-8')).hexdigest()
   return hash
-
-def fire():
-  print("FIREIFREFIRE")
 
 def settingswindow():
     v=0
@@ -170,7 +173,6 @@ def settingswindow():
 shutdown garantees a quicker shutdown and should be used by more paranoid\
  users, but may corrupt data.""",wraplength=275).pack(pady=5)
 
-    print(panic)
     update_settings()
 
 def update_settings():
@@ -235,7 +237,7 @@ def start():
 
   panicf = Frame()
   panic = Button(panicf, text="PANIC",font=('',28,''), bg="#db0303", fg="black"
-                 ,activebackground="red", command=fire)
+                 ,activebackground="red", command=temp_panic)
   panic.pack(side="bottom", fill='both')
   panicf.pack(fill=X, padx=5, pady=5,side='bottom')
 
