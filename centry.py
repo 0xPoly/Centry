@@ -132,17 +132,17 @@ def settingswindow():
     panic_heading = Label(toplevel, text="On Panic, Centry Will:",
                           font=('',10,'bold'))
     panic_heading.pack()
-    global tc, ls, rm, sw, pw
+    global tc, ls, rm, sw, pw, ec, sd
     tc = Button(toplevel,command=lambda:toggle("truecrypt"))
-    tc.pack(fill="both", padx=5, pady=5)
+    tc.pack(fill="both", padx=5, pady=2)
     ls = Button(toplevel,command=lambda:toggle("screenlock"))
-    ls.pack(fill="both", padx=5, pady=5)
+    ls.pack(fill="both", padx=5, pady=2)
     rm = Button(toplevel,command=lambda:toggle("ram"))
-    rm.pack(fill="both", padx=5, pady=5)
+    rm.pack(fill="both", padx=5, pady=2)
     sw = Button(toplevel,command=lambda:toggle("swap"))
-    sw.pack(fill="both", padx=5, pady=5)
+    sw.pack(fill="both", padx=5, pady=2)
     pw = Button(toplevel,command=lambda:toggle("propogate"))
-    pw.pack(fill="both", padx=5, pady=5)
+    pw.pack(fill="both", padx=5, pady=2)
 
     separator2= Frame(toplevel,height=2, bd=1, relief=SUNKEN)
     separator2.pack(side='top',fill=X, padx=5, pady=5)
@@ -150,35 +150,26 @@ def settingswindow():
     ecc = Frame(toplevel)
     ecc_heading = Label(ecc, text="RAM Type",font=('',10,'bold'))
     ecc_heading.pack()
-    ecc_no = Radiobutton(ecc, text="Normal",variable=v,value=0)
-    ecc_no.pack(side="left")
-    ecc_yes = Radiobutton(ecc, text="Error Correcting (ECC)",variable=v,
-                          value=1)
-    ecc_yes.pack(side='right')
+    ec = Button(ecc, command=lambda:toggle("ecc"))
+    ec.pack(fill="both", padx =5, pady=2)
     ecc.pack(fill='x')
-    ecc_help = Label(toplevel,text="""If unsure, select 'Normal'.\n Selecting \
-'ECC' will invoke a restart on panic instead of shutdown, as ECC DRAMs reset\
+    ecc_help = Label(toplevel,text="""If unsure, select 'Non-ECC'.\n Selecting \
+'ECC RAM' will invoke a restart on panic instead of shutdown, as ECC DRAMs reset\
  all capacitors when power-cycled.""",wraplength=275).pack(pady=5)
 
     separator3= Frame(toplevel,height=2, bd=1, relief=SUNKEN)
     separator3.pack(side='top',fill=X, padx=5, pady=5)
 
     restart = Frame(toplevel)
-    restart_heading = Label(restart,text='Select Shutdown Mode',
+    restart_heading = Label(restart,text='Shutdown Mode',
                             font=('',10,'bold')).pack()
-    restart_no = Radiobutton(restart, text="Soft",variable=v,value=0)
-    restart_no.pack(side="left",anchor='e')
-    restart_yes = Radiobutton(restart, text="Hard/ACPI",variable=v, value=1)
-    restart_yes.pack(side='right', anchor='w')
+    sd = Button(restart, command=lambda:toggle("hardshutdown"))
+    sd.pack(fill="both", padx=5, pady=2)
     restart.pack(fill='x')
     restart_help = Label(toplevel,text="""If unsure, select 'Soft'.\n ACPI \
 shutdown garantees a quicker shutdown and should be used by more paranoid\
  users, but may corrupt data.""",wraplength=275).pack(pady=5)
 
-    separator4= Frame(toplevel,height=2, bd=1, relief=SUNKEN)
-    separator4.pack(side='top',fill=X, padx=5, pady=5)
-    savebutton = Button(toplevel, text="Save",command=toplevel.quit)
-    savebutton.pack(fill='x',padx=5,pady=5)
     print(panic)
     update_settings()
 
@@ -203,6 +194,14 @@ def update_settings():
        pw.config(text="Propogate the Panic Signal")
     else:
        pw.config(text="NOT Propogate the Panic Signal")
+    if panic["ecc"] == "1":
+       ec.config(text="Error Correcting Code RAM")
+    else:
+       ec.config(text="Non-ECC RAM")
+    if panic["hardshutdown"] == "1":
+       sd.config(text="Hard/ACPI Shutdown")
+    else:
+       sd.config(text="Soft Shutdown")
 
 def start():
   app = Tk()
