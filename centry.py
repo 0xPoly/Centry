@@ -22,54 +22,64 @@ args = parser.parse_args()
 
 def configsave():
   if os.path.isfile('centry.conf'):
-    panic_options = {}
+    panic = {}
     for key, val in csv.reader(open("centry.conf")):
-      panic_options[key] = val
-    return panic_options
+      panic[key] = val
+    return panic
   else:
-    panic_options = {"screenlock":1,"passlock":1,"truecrypt":1,"ram":1,"swap":1,
+    panic = {"screenlock":1,"passlock":1,"truecrypt":1,"ram":1,"swap":1,
 "ecc":1,"hardshutdown":1,"propogate":1}
     w = csv.writer(open("centry.conf", "w"))
-    for key, val in panic_options.items():
+    for key, val in panic.items():
       w.writerow([key, val])
-    return panic_options
+    return panic
+
+def toggle(option):
+   global panic
+   if panic[option] == "1":
+     panic[option] = "0"
+   else:
+     panic[option] = "1"
+   w = csv.writer(open("centry.conf", "w"))
+   for key, val in panic.items():
+     w.writerow([key, val])
+   update_settings()
 
 def panic():
   #TODO: Implement timeout
   if os.name == 'nt':
-    if panic_options['truecrypt']:
+    if panic['truecrypt']:
       os.popen("truecrypt.exe /wipecache")
 
-    if panic_options['screenlock']:
+    if panic['screenlock']:
       winpath = os.environ["windir"]
       os.system(winpath + r'\system32\rundll32 user32.dll, LockWorkStation')
-    if panic_options['ecc']:
+    if panic['ecc']:
       os.popen("shutdown /r /f /t 0")
     else:
       os.popen("shutdown /s /f /t 0")
 
   elif os.name == 'posix':
-    if panic_options['truecrypt']:           
+    if panic['truecrypt']:           
       os.popen("truecrypt /wipecache")
      
-    if panic_options['ram']:            #TODO: does this lock disks? Mac?
+    if panic['ram']:            #TODO: does this lock disks? Mac?
       os.popen("sdmem -llf")
 
-    if panic_options["swap"]:
+    if panic["swap"]:
       os.popen('swapoff')
       os.popen("sswap")
 
-    if panic_options['screenlock']:          
+    if panic['screenlock']:          
       os.popen("gnome-screensaver-command -lock")
 
-    if panic_options['hardshutdown']:
-      if panic_opptions['ecc']:
+    if panic['hardshutdown']:
+      if panic['ecc']:
         os.popen("echo 1 > /proc/sys/kernel/sysrq")
         os.popen("echo b > /proc/sysrq-trigger")
       else:
         os.popen("echo 1 > /proc/sys/kernel/sysrq")
         os.popen("echo o > /proc/sysrq-trigger")
-    else:
       os.popen("shutdown -P now")
 
 def listentcp():
@@ -119,20 +129,20 @@ def settingswindow():
     separator = Frame(toplevel,height=2, bd=1, relief=SUNKEN)
     separator.pack(side='top',fill=X, padx=5, pady=5)
 
-    panic_heading = Label(toplevel, text="On Panic, Centry Will",
+    panic_heading = Label(toplevel, text="On Panic, Centry Will:",
                           font=('',10,'bold'))
     panic_heading.pack()
-
-    truecryptlock = Checkbutton(toplevel, text="Lock Truecrypt Partitions and\
- Wipe Cache")
-    truecryptlock.pack(anchor='w')
-    lockscreen = Checkbutton(toplevel, text="Lock screen")
-    lockscreen.pack(anchor='w')
-    clearmemory = Checkbutton(toplevel,text="Securely Overwrite RAM")
-    clearmemory.pack(anchor='w')
-    propogate = Checkbutton(toplevel, text="Broadcast the Signal to other \
-Machines")
-    propogate.pack(anchor='w')
+    global tc, ls, rm, sw, pw
+    tc = Button(toplevel,command=lambda:toggle("truecrypt"))
+    tc.pack(fill="both", padx=5, pady=5)
+    ls = Button(toplevel,command=lambda:toggle("screenlock"))
+    ls.pack(fill="both", padx=5, pady=5)
+    rm = Button(toplevel,command=lambda:toggle("ram"))
+    rm.pack(fill="both", padx=5, pady=5)
+    sw = Button(toplevel,command=lambda:toggle("swap"))
+    sw.pack(fill="both", padx=5, pady=5)
+    pw = Button(toplevel,command=lambda:toggle("propogate"))
+    pw.pack(fill="both", padx=5, pady=5)
 
     separator2= Frame(toplevel,height=2, bd=1, relief=SUNKEN)
     separator2.pack(side='top',fill=X, padx=5, pady=5)
@@ -169,6 +179,30 @@ shutdown garantees a quicker shutdown and should be used by more paranoid\
     separator4.pack(side='top',fill=X, padx=5, pady=5)
     savebutton = Button(toplevel, text="Save",command=toplevel.quit)
     savebutton.pack(fill='x',padx=5,pady=5)
+    print(panic)
+    update_settings()
+
+def update_settings():
+    if panic["truecrypt"] == "1":
+       tc.config(text="Lock Truecrypt Disks and Wipe Cache")
+    else:
+       tc.config(text="NOT Lock Truecrypt Disks or Wipe Cache")
+    if panic["screenlock"] == "1":
+       ls.config(text="Lock Screen")
+    else:
+       ls.config(text="NOT Lock Screen")
+    if panic["swap"] == "1":
+       sw.config(text="Securely Wipe Swap")
+    else:
+       sw.config(text="NOT Wipe Swap")
+    if panic["ram"] == "1":
+       rm.config(text="Securely erase RAM")
+    else:
+       rm.config(text="NOT Erase RAM")
+    if panic["propogate"] == "1":
+       pw.config(text="Propogate the Panic Signal")
+    else:
+       pw.config(text="NOT Propogate the Panic Signal")
 
 def start():
   app = Tk()
@@ -212,6 +246,8 @@ def start():
   app.mainloop()
 
 def main():
+  global panic
+  panic = configsave()
   w = multiprocessing.Process(target = start).start()
   m = multiprocessing.Process(target = listenbcast).start()
   r = multiprocessing.Process(target = listentcp).start()
