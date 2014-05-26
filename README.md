@@ -2,6 +2,7 @@ Centry
 ======
 ## Introduction ##
 Centry is a panic button intended to protect users against [Cold Boot Attacks](http://www1.cs.fau.de/filepool/projects/coldboot/fares_coldboot.pdf), [Direct Memory Access Attacks](http://www.breaknenter.org/projects/inception/) and other live system threats. Centry is most effective when deployed on systems with Full Disk Encryption and without a swap/page file. The panic function can be activated through the GUI or through a network request (through browser, smartphone, etc). Upon recieving the panic instruction, Centry will attempt to remove sensitive keys from memory, securily overwrite the RAM and then force a shutdown.
+
 ![screenshot](/screenshot.png)
 ## Features ##
 * User-friendly GUI interface
