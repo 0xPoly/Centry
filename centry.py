@@ -16,6 +16,7 @@
 #       Inspired by panic_bcast
 
 import sys, os
+import time
 import hashlib
 import socket
 import select
@@ -54,32 +55,32 @@ def temp_panic():
 def panic():
   #TODO: Implement timeout
   if os.name == 'nt':
-    if panic['truecrypt']:
+    if panic['truecrypt'] == "1":
       os.popen("truecrypt.exe /wipecache")
 
-    if panic['screenlock']:
+    if panic['screenlock'] == "1":
       winpath = os.environ["windir"]
       os.system(winpath + r'\system32\rundll32 user32.dll, LockWorkStation')
-    if panic['ecc']:
+    if panic['ecc'] == "1":
       os.popen("shutdown /r /f /t 0")
     else:
       os.popen("shutdown /s /f /t 0")
 
   elif os.name == 'posix':
-    if panic['truecrypt']:           
+    if panic['truecrypt'] == "1":           
       os.popen("truecrypt /wipecache")
      
-    if panic['ram']:            #TODO: does this lock disks? Mac?
+    if panic['ram'] == "1":            #TODO: does this lock disks? Mac?
       os.popen("sdmem -llf")
 
-    if panic["swap"]:
+    if panic["swap"] == "1":
       os.popen('swapoff')
       os.popen("sswap")
 
-    if panic['screenlock']:          
+    if panic['screenlock'] == "1":
       os.popen("gnome-screensaver-command -lock")
 
-    if panic['hardshutdown']:
+    if panic['hardshutdown'] == "1":
       if panic['ecc']:
         os.popen("echo 1 > /proc/sys/kernel/sysrq")
         os.popen("echo b > /proc/sysrq-trigger")
@@ -87,23 +88,28 @@ def panic():
         os.popen("echo 1 > /proc/sys/kernel/sysrq")
         os.popen("echo o > /proc/sysrq-trigger")
       os.popen("shutdown -P now")
+  if panic['propogate'] == "1":
+    broadcast_panic() 
 
 def listentcp():
   s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
   try:
     s.bind(("",80))
   except:
-    print("Binding socket Failed. Got root?")
+    print("WARNING: FAILED TO BIND TO TCP SOCKET. ARE YOU RUNNING AS ROOT?")
     sys.exit()
   s.listen(1)
   conn, addr = s.accept()
   temp_panic()
 
 def listenbcast():
-  bufferSize=256  
-  s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
-  s.bind(('<broadcast>',29899))
-  s.setblocking(0)
+  bufferSize=256
+  try:
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.bind(('<broadcast>',29899))
+    s.setblocking(0)
+  except:
+    print("WARNING: FAILED TO BIND TO UDP SOCKET. ARE YOU RUNNING AS ROOT?")
 
   while True:
     result = select.select([s],[],[])
@@ -124,7 +130,6 @@ def hash():
   return hash
 
 def settingswindow():
-    v=0
     toplevel = Toplevel()
 
     title = Label(toplevel, text="Centry Settings", font=('','16','')).pack()
@@ -226,31 +231,21 @@ def start():
 
   separator = Frame(body,height=2, bd=1, relief=SUNKEN)
   separator.pack(side='top',fill=X, padx=5, pady=5)
-
-  status=Label(body)
-  status["text"] = "Status: Armed (Paranoid)"
-  status['font'] = ('', 14,'')
-  status.pack(fill="both")
-  body.pack(fill="both")
-
-  mainframe.pack(side='top', fill="both")
-
-  panicf = Frame()
-  panic = Button(panicf, text="PANIC",font=('',28,''), bg="#db0303", fg="black"
+  panic = Button(body, text="PANIC",font=('',28,''), bg="#db0303", fg="black"
                  ,activebackground="red", command=temp_panic)
-  panic.pack(side="bottom", fill='both')
-  panicf.pack(fill=X, padx=5, pady=5,side='bottom')
-
+  panic.pack(side="bottom", fill='both',pady=5,padx=5)
+  body.pack(fill="both")
+  mainframe.pack(side='top',fill='both')
   app.title("Centry")
-  app.geometry("400x165")
+  app.geometry("400x125")
   app.iconbitmap("@icon.xbm")
   app.mainloop()
 
 def main():
   global panic
   panic = configsave()
-  w = multiprocessing.Process(target = start).start()
   m = multiprocessing.Process(target = listenbcast).start()
   r = multiprocessing.Process(target = listentcp).start()
+  w = multiprocessing.Process(target = start).start()
 
 main()
