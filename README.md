@@ -24,6 +24,7 @@ Centry is a panic button intended to protect users against Cold Boot Attacks, Di
 * Download the [Windows-optimized version](http://)
 * Unzip the archive
 * Double click on "Centry.py"
+
 ####Linux####
 For significantly improved security install the `secure-delete` package. On Ubuntu/Debian:
 
@@ -33,9 +34,6 @@ Then download and run Centry as root:
 
      git clone https://github.com/0xPoly/Centry.git
      sudo python centry.py
-####Mac OS####
-
-TODO
 
 ## Contributors and License ##
 - 0xPoly - [twitter](https://twitter.com/0xPoly)
