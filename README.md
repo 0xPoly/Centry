@@ -12,8 +12,6 @@ Centry is a panic button intended to protect users against [Cold Boot Attacks](h
   * Clear out swap file using sswap
   * Force an ACPI shutdown (equivilent holding down the power button)
   * Propogate the panic signal to all other nodes in the network
-* Set a password to start panic
-* Garanteed system shutdown within 5 seconds of recieving the panic signal.
 * Settings to improve security on ECC-enabled systems
 * Extensively customizable
 * Compatable with Windows, Linux and Mac OS; with significantly more security in Linux.
