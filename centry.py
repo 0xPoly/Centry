@@ -49,47 +49,51 @@ def toggle(option):
      w.writerow([key, val])
    update_settings()
 
-def temp_panic():
-   print("PANIC PANIC PANIC")
-
-def panic():
-  #TODO: Implement timeout
+def panic_now():
   if os.name == 'nt':
-    if panic['truecrypt'] == "1":
-      os.popen("truecrypt.exe /wipecache")
+    try:
+      if panic['truecrypt'] == "1":
+        os.popen("truecrypt.exe /wipecache")
 
-    if panic['screenlock'] == "1":
-      winpath = os.environ["windir"]
-      os.system(winpath + r'\system32\rundll32 user32.dll, LockWorkStation')
+      if panic['screenlock'] == "1":
+        winpath = os.environ["windir"]
+        os.system(winpath + r'\system32\rundll32 user32.dll, LockWorkStation')
+    except:
+        print("something went wrong")
     if panic['ecc'] == "1":
-      os.popen("shutdown /r /f /t 0")
+        os.popen("shutdown /r /f /t 0")
     else:
-      os.popen("shutdown /s /f /t 0")
+        os.popen("shutdown /s /f /t 0")
 
   elif os.name == 'posix':
-    if panic['truecrypt'] == "1":           
-      os.popen("truecrypt /wipecache")
+    try:
+      if panic['truecrypt'] == "1":           
+        os.popen("truecrypt /wipecache")
      
-    if panic['ram'] == "1":            #TODO: does this lock disks? Mac?
-      os.popen("sdmem -llf")
+      if panic['ram'] == "1":            #TODO: does this lock disks? Mac?
+        os.popen("sdmem -llf")
 
-    if panic["swap"] == "1":
-      os.popen('swapoff')
-      os.popen("sswap")
+      if panic["swap"] == "1":
+        os.popen('swapoff')
+        os.popen("sswap")
 
-    if panic['screenlock'] == "1":
-      os.popen("gnome-screensaver-command -lock")
+      if panic['screenlock'] == "1":
+        os.popen("gnome-screensaver-command -lock")
+
+      if panic["propogate"] == "1":
+        broadcast_panic()
+    except:
+      print("something went wrong")
 
     if panic['hardshutdown'] == "1":
-      if panic['ecc']:
+      if panic['ecc'] == "1":
         os.popen("echo 1 > /proc/sys/kernel/sysrq")
         os.popen("echo b > /proc/sysrq-trigger")
       else:
         os.popen("echo 1 > /proc/sys/kernel/sysrq")
         os.popen("echo o > /proc/sysrq-trigger")
-      os.popen("shutdown -P now")
-  if panic['propogate'] == "1":
-    broadcast_panic() 
+    else:
+        os.popen("shutdown -P now")
 
 def listentcp():
   s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -100,7 +104,7 @@ def listentcp():
     sys.exit()
   s.listen(1)
   conn, addr = s.accept()
-  temp_panic()
+  panic_now()
 
 def listenbcast():
   bufferSize=256
@@ -115,19 +119,16 @@ def listenbcast():
     result = select.select([s],[],[])
     msg = result[0][0].recv(bufferSize)
     if msg == b'panic\n':
-      temp_panic()
+      panic_now()
       break
     else:
       print("Incorrect Signal Recieved: " + str(msg))
 def broadcast_panic():
+  msg = b'panic\n'
   s = socket.socket( socket.AF_INET, socket.SOCK_DGRAM )
   s.setsockopt( socket.SOL_SOCKET, socket.SO_BROADCAST, 1 )
-  s.sendto(hash(), ("<broadcast>", 29899 ) )
+  s.sendto(msg, ("<broadcast>", 29899 ) )
   s.close()
-
-def hash():
-  hash = hashlib.sha256(args.key.encode('UTF-8')).hexdigest()
-  return hash
 
 def settingswindow():
     toplevel = Toplevel()
@@ -232,7 +233,7 @@ def start():
   separator = Frame(body,height=2, bd=1, relief=SUNKEN)
   separator.pack(side='top',fill=X, padx=5, pady=5)
   panic = Button(body, text="PANIC",font=('',28,''), bg="#db0303", fg="black"
-                 ,activebackground="red", command=temp_panic)
+                 ,activebackground="red", command=lambda:panic_now())
   panic.pack(side="bottom", fill='both',pady=5,padx=5)
   body.pack(fill="both")
   mainframe.pack(side='top',fill='both')
