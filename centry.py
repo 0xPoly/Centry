@@ -73,9 +73,9 @@ def panic_now():
       if panic['ram'] == "1":            #TODO: does this lock disks? Mac?
         os.popen("sdmem -llf")
 
-      if panic["swap"] == "1":
-        os.popen('swapoff')
-        os.popen("sswap")
+#      if panic["swap"] == "1":    #TODO find a better way to deal with swap
+#        os.popen('swapoff')
+#        os.popen("sswap")
 
       if panic['screenlock'] == "1":
         os.popen("gnome-screensaver-command -lock")
