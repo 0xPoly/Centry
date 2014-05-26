@@ -21,7 +21,7 @@ Centry is a panic button intended to protect users against Cold Boot Attacks, Di
 ## Installation ##
 ####Windows####
 * Install `python 3.4` from the [here](https://www.python.org/ftp/python/3.4.1/python-3.4.1.msi)
-* Download the [Windows-optimized version](http://)
+* Download the [Windows-optimized version](http://darkdepths.net/centry-windows.zip)
 * Unzip the archive
 * Double click on "Centry.py"
 
