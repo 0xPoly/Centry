@@ -248,7 +248,7 @@ def start():
 def correct_hash():
   passwd = str(sys.argv[:1]).strip("[]'")
   passwd = passwd.encode('utf-8')
-  i = datetime.datetime.now().isoformat()[:-10].encode('utf-8')
+  i = datetime.datetime.utcnow().isoformat()[:-10].encode('utf-8')
   pass_hash = hashlib.sha256(passwd+i)
   pass_hash = pass_hash.hexdigest()
   return pass_hash
