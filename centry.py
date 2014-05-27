@@ -24,6 +24,7 @@ import csv
 import multiprocessing
 from tkinter import *
 import hashlib
+import datetime
 
 def configsave():
   if os.path.isfile('centry.conf'):
@@ -71,7 +72,7 @@ def panic_now():
       if panic['truecrypt'] == "1":           
         os.popen("truecrypt /d /f /w /q /s")
      
-      if panic['ram'] == "1":            #TODO: does this lock disks? Mac?
+      if panic['ram'] == "1":     
         os.popen("sdmem -llf")
 
 #      if panic["swap"] == "1":    #TODO find a better way to deal with swap
@@ -119,13 +120,13 @@ def listenbcast():
   while True:
     result = select.select([s],[],[])
     msg = result[0][0].recv(bufferSize)
-    if msg == pass_hash:
+    if msg == correct_hash():
       panic_now()
       break
     else:
       print("Incorrect Signal Recieved: " + str(msg))
 def broadcast_panic():
-  msg = pass_hash
+  msg = correct_hash
   s = socket.socket( socket.AF_INET, socket.SOCK_DGRAM )
   s.setsockopt( socket.SOL_SOCKET, socket.SO_BROADCAST, 1 )
   s.sendto(msg, ("<broadcast>", 29899 ) )
@@ -250,13 +251,12 @@ def main():
 # r = multiprocessing.Process(target = listentcp).start()
   w = multiprocessing.Process(target = start).start()
 
-passwd = str(sys.argv[:1]).strip("[]'")
-passwd = passwd.encode('utf-8')
-print(passwd)
-global pass_hash
-pass_hash = hashlib.sha256(passwd)
-pass_hash = pass_hash.hexdigest()
-print(pass_hash)
-
+def correct_hash():
+  passwd = str(sys.argv[:1]).strip("[]'")
+  passwd = passwd.encode('utf-8')
+  i = datetime.datetime.now().isoformat()[:-10].encode('utf-8')
+  pass_hash = hashlib.sha256(passwd+i)
+  pass_hash = pass_hash.hexdigest()
+  return pass_hash
 
 main()
