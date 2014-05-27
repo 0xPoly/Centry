@@ -244,12 +244,6 @@ def start():
   app.iconbitmap("@icon.xbm")
   app.mainloop()
 
-def main():
-  global panic
-  panic = configsave()
-  m = multiprocessing.Process(target = listenbcast).start()
-# r = multiprocessing.Process(target = listentcp).start()
-  w = multiprocessing.Process(target = start).start()
 
 def correct_hash():
   passwd = str(sys.argv[:1]).strip("[]'")
@@ -258,5 +252,12 @@ def correct_hash():
   pass_hash = hashlib.sha256(passwd+i)
   pass_hash = pass_hash.hexdigest()
   return pass_hash
+
+def main():
+  global panic
+  panic = configsave()
+  m = multiprocessing.Process(target = listenbcast).start()
+# r = multiprocessing.Process(target = listentcp).start()
+  w = multiprocessing.Process(target = start).start()
 
 main()
