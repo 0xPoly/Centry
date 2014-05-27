@@ -176,7 +176,7 @@ def settingswindow():
     sd.pack(fill="both", padx=5, pady=2)
     restart.pack(fill='x')
     restart_help = Label(toplevel,text="""If unsure, select 'Soft'.\n ACPI \
-shutdown garantees a quicker shutdown and should be used by more paranoid\
+shutdown guarantee a quicker shutdown and should be used by more paranoid\
  users, but may corrupt data.""",wraplength=275).pack(pady=5)
 
     update_settings()
