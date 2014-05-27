@@ -23,6 +23,7 @@ import select
 import csv
 import multiprocessing
 from tkinter import *
+import hash
 
 def configsave():
   if os.path.isfile('centry.conf'):
@@ -95,16 +96,16 @@ def panic_now():
     else:
         os.popen("shutdown -P now")
 
-def listentcp():
-  s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-  try:
-    s.bind(("",80))
-  except:
-    print("WARNING: FAILED TO BIND TO TCP SOCKET. ARE YOU RUNNING AS ROOT?")
-    sys.exit()
-  s.listen(1)
-  conn, addr = s.accept()
-  panic_now()
+#def listentcp():
+#  s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+#  try:
+#    s.bind(("",80))
+#  except:
+#    print("WARNING: FAILED TO BIND TO TCP SOCKET. ARE YOU RUNNING AS ROOT?")
+#    sys.exit()
+#  s.listen(1)
+#  conn, addr = s.accept()
+#  panic_now()
 
 def listenbcast():
   bufferSize=256
@@ -113,18 +114,18 @@ def listenbcast():
     s.bind(('<broadcast>',29899))
     s.setblocking(0)
   except:
-    print("WARNING: FAILED TO BIND TO UDP SOCKET. ARE YOU RUNNING AS ROOT?")
+    print("WARNING: FAILED TO BIND TO UDP SOCKET.")
 
   while True:
     result = select.select([s],[],[])
     msg = result[0][0].recv(bufferSize)
-    if msg == b'panic\n':
+    if msg == pass_hash:
       panic_now()
       break
     else:
       print("Incorrect Signal Recieved: " + str(msg))
 def broadcast_panic():
-  msg = b'panic\n'
+  msg = pass_hash
   s = socket.socket( socket.AF_INET, socket.SOCK_DGRAM )
   s.setsockopt( socket.SOL_SOCKET, socket.SO_BROADCAST, 1 )
   s.sendto(msg, ("<broadcast>", 29899 ) )
@@ -248,5 +249,9 @@ def main():
   m = multiprocessing.Process(target = listenbcast).start()
   r = multiprocessing.Process(target = listentcp).start()
   w = multiprocessing.Process(target = start).start()
+
+global pass_hash
+pass_hash = hash.sha2(sys.arg).hexdigest()
+print pass_hash
 
 main()
