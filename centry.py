@@ -23,7 +23,7 @@ import select
 import csv
 import multiprocessing
 from tkinter import *
-import hash
+import hashlib
 
 def configsave():
   if os.path.isfile('centry.conf'):
@@ -247,11 +247,16 @@ def main():
   global panic
   panic = configsave()
   m = multiprocessing.Process(target = listenbcast).start()
-  r = multiprocessing.Process(target = listentcp).start()
+# r = multiprocessing.Process(target = listentcp).start()
   w = multiprocessing.Process(target = start).start()
 
+passwd = str(sys.argv[:1]).strip("[]'")
+passwd = passwd.encode('utf-8')
+print(passwd)
 global pass_hash
-pass_hash = hash.sha2(sys.arg).hexdigest()
-print pass_hash
+pass_hash = hashlib.sha256(passwd)
+pass_hash = pass_hash.hexdigest()
+print(pass_hash)
+
 
 main()
