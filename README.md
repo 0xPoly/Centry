@@ -21,7 +21,7 @@ Centry is a panic button intended to protect users against [Cold Boot Attacks](h
 * Install `python 3.4` from the [here](https://www.python.org/ftp/python/3.4.1/python-3.4.1.msi)
 * Download the [Windows-optimized version](http://darkdepths.net/centry-windows.zip)
 * Unzip the archive
-* Double click on "Centry.py"
+* Run `python Centry.py "password"`
 
 ####Linux####
 For significantly improved security install the `secure-delete` package. On Ubuntu/Debian:
@@ -31,7 +31,7 @@ For significantly improved security install the `secure-delete` package. On Ubun
 Then download and run Centry as root:
 
      git clone https://github.com/0xPoly/Centry.git
-     sudo python centry.py
+     sudo python centry.py "password"
 
 ## Contributors and License ##
 - 0xPoly - [twitter](https://twitter.com/0xPoly)
