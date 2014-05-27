@@ -17,15 +17,9 @@ Centry is a panic button intended to protect users against [Cold Boot Attacks](h
   * Propogate the panic signal to all other nodes in the network
 * Settings to improve security on ECC-enabled systems
 * Extensively customizable
-* Compatable with Windows, Linux and Mac OS; with significantly more security in Linux.
+* Compatable with Linux and Mac OS; with significantly more security in Linux.
 
 ## Installation ##
-####Windows####
-* Install `python 3.4` from the [here](https://www.python.org/ftp/python/3.4.1/python-3.4.1.msi)
-* Download the [Windows-optimized version](http://darkdepths.net/centry-windows.zip)
-* Unzip the archive
-* Run `python Centry.py "password"`
-
 ####Linux####
 For significantly improved security install the `secure-delete` package. On Ubuntu/Debian:
 
@@ -38,5 +32,5 @@ Then download and run Centry as root:
 
 ## Contributors and License ##
 - 0xPoly - [twitter](https://twitter.com/0xPoly)
-
+- 
 This is a free open-source program distirbuted under the [GNU General Public License](/LICENSE). Comments, suggestions and pull requests are all heartily encouraged.
