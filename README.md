@@ -31,6 +31,7 @@ Then download and run Centry as root:
      sudo python centry.py "password"
 
 ## Contributors and License ##
+
 - 0xPoly - [twitter](https://twitter.com/0xPoly)
-- 
+ 
 This is a free open-source program distirbuted under the [GNU General Public License](/LICENSE). Comments, suggestions and pull requests are all heartily encouraged.
