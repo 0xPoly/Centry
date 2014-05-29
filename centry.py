@@ -52,24 +52,27 @@ def toggle(option):
    update_settings()
 
 def really_panic():
-	toplevel = Toplevel()
-	
-	title = Label(toplevel, text="!PANIC!", font=('','16','')).pack()
-	
-	separator = Frame(toplevel, height=2, bd=1, relief=SUNKEN)
-	separator.pack(side='top', fill=X, padx=5, pady=5)
+	if panic['confirmation'] == "1":
+		toplevel = Toplevel()
+    
+		title = Label(toplevel, text="!PANIC!", font=('','16','')).pack()
 
-	really_heading = Label(toplevel, text="Go ahead with panic?", font=('',10,'bold'))
-	really_heading.pack()
+		separator = Frame(toplevel, height=2, bd=1, relief=SUNKEN)
+		separator.pack(side='top', fill=X, padx=5, pady=5)
 
-	otherwise = Label(toplevel, text="If you don't want to panic, close this window.", font=('',10,'bold'))
-	otherwise.pack()
+		really_heading = Label(toplevel, text="Go ahead with panic?", font=('',10,'bold'))
+		really_heading.pack()
 
-	global yes
+		otherwise = Label(toplevel, text="If you don't want to panic, close this window.\nIf you don't want this window to show, you can disable it in settings.", font=('',10,'bold'))
+		otherwise.pack()
 
-	yes = Button(toplevel, bg="#db0303", fg="black", activebackground="red", command=lambda:panic_now())
-	yes.config(text="Yes, panic.")
-	yes.pack()
+		global yes
+
+		yes = Button(toplevel, bg="#db0303", fg="black", activebackground="red", command=lambda:panic_now())
+		yes.config(text="Yes, panic.")
+		yes.pack()
+	else:
+		panic_now()
 def panic_now():
    if os.name == 'nt':
     try:
@@ -162,7 +165,7 @@ def settingswindow():
     panic_heading = Label(toplevel, text="On Panic, Centry Will:",
                           font=('',10,'bold'))
     panic_heading.pack()
-    global tc, ls, rm, sw, pw, ec, sd
+    global tc, ls, rm, sw, pw, ec, sd, co
     tc = Button(toplevel,command=lambda:toggle("truecrypt"))
     tc.pack(fill="both", padx=5, pady=2)
     ls = Button(toplevel,command=lambda:toggle("screenlock"))
@@ -173,6 +176,8 @@ def settingswindow():
     sw.pack(fill="both", padx=5, pady=2)
     pw = Button(toplevel,command=lambda:toggle("propogate"))
     pw.pack(fill="both", padx=5, pady=2)
+    co = Button(toplevel,command=lambda:toggle("confirmation"))
+    co.pack(fill="both", padx=5, pady=2)
 
     separator2= Frame(toplevel,height=2, bd=1, relief=SUNKEN)
     separator2.pack(side='top',fill=X, padx=5, pady=5)
@@ -231,6 +236,10 @@ def update_settings():
        sd.config(text="Hard/ACPI Shutdown")
     else:
        sd.config(text="Soft Shutdown")
+    if panic["confirmation"] == "1":
+       co.config(text="Panic confirmation window")
+    else:
+       co.config(text="No panic confirmation window")
 
 def start():
   app = Tk()
