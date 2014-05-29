@@ -77,7 +77,7 @@ def panic_now():
    if os.name == 'nt':
     try:
       if panic['truecrypt'] == "1":
-        s.popen("truecrypt.exe /d /f /w /q /s")
+        os.popen("truecrypt.exe /d /f /w /q /s")
 
       if panic['screenlock'] == "1":
         winpath = os.environ["windir"]
