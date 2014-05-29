@@ -34,7 +34,7 @@ def configsave():
     return panic
   else:
     panic = {"screenlock":1,"passlock":1,"truecrypt":1,"ram":1,"swap":1,
-"ecc":1,"hardshutdown":1,"propogate":1}
+"ecc":1,"hardshutdown":1,"propogate":1,"confirmation":0}
     w = csv.writer(open("centry.conf", "w"))
     for key, val in panic.items():
       w.writerow([key, val])
@@ -80,7 +80,7 @@ def panic_now():
         os.popen("truecrypt.exe /d /f /w /q /s")
 
       if panic['screenlock'] == "1":
-        winpath = os.environ["windir"]
+        winpath = os.environ["windir"] # locks screen
         os.system(winpath + r'\system32\rundll32 user32.dll, LockWorkStation')
     except:
         print("something went wrong")
@@ -96,10 +96,6 @@ def panic_now():
      
       if panic['ram'] == "1":     
         os.popen("sdmem -llf")
-
-#      if panic["swap"] == "1":    #TODO find a better way to deal with swap
-#        os.popen('swapoff')
-#        os.popen("sswap")
 
       if panic['screenlock'] == "1":
         os.popen("gnome-screensaver-command -lock")
@@ -118,17 +114,6 @@ def panic_now():
         os.popen("echo o > /proc/sysrq-trigger")
     else:
         os.popen("shutdown -P now")
-
-#def listentcp():
-#  s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-#  try:
-#    s.bind(("",80))
-#  except:
-#    print("WARNING: FAILED TO BIND TO TCP SOCKET. ARE YOU RUNNING AS ROOT?")
-#    sys.exit()
-#  s.listen(1)
-#  conn, addr = s.accept()
-#  panic_now()
 
 def listenbcast():
   bufferSize=256
@@ -284,7 +269,6 @@ def main():
   global panic
   panic = configsave()
   m = multiprocessing.Process(target = listenbcast).start()
-# r = multiprocessing.Process(target = listentcp).start()
   w = multiprocessing.Process(target = start).start()
 
 main()
