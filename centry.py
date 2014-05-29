@@ -22,7 +22,7 @@ import socket
 import select
 import csv
 import multiprocessing
-from Tkinter import *
+from tkinter import *
 import hashlib
 import datetime
 
@@ -51,11 +51,30 @@ def toggle(option):
      w.writerow([key, val])
    update_settings()
 
+def really_panic():
+	toplevel = Toplevel()
+	
+	title = Label(toplevel, text="!PANIC!", font=('','16','')).pack()
+	
+	separator = Frame(toplevel, height=2, bd=1, relief=SUNKEN)
+	separator.pack(side='top', fill=X, padx=5, pady=5)
+
+	really_heading = Label(toplevel, text="Go ahead with panic?", font=('',10,'bold'))
+	really_heading.pack()
+
+	otherwise = Label(toplevel, text="If you don't want to panic, close this window.", font=('',10,'bold'))
+	otherwise.pack()
+
+	global yes
+
+	yes = Button(toplevel, bg="#db0303", fg="black", activebackground="red", command=lambda:panic_now())
+	yes.config(text="Yes, panic.")
+	yes.pack()
 def panic_now():
-  if os.name == 'nt':
+   if os.name == 'nt':
     try:
       if panic['truecrypt'] == "1":
-        os.popen("truecrypt.exe /d /f /w /q /s")
+        s.popen("truecrypt.exe /d /f /w /q /s")
 
       if panic['screenlock'] == "1":
         winpath = os.environ["windir"]
@@ -67,7 +86,7 @@ def panic_now():
     else:
         os.popen("shutdown /s /f /t 0")
 
-  elif os.name == 'posix':
+   elif os.name == 'posix':
     try:
       if panic['truecrypt'] == "1":           
         os.popen("truecrypt /d /f /w /q /s")
@@ -234,8 +253,7 @@ def start():
 
   separator = Frame(body,height=2, bd=1, relief=SUNKEN)
   separator.pack(side='top',fill=X, padx=5, pady=5)
-  panic = Button(body, text="PANIC",font=('',28,''), bg="#db0303", fg="black"
-                 ,activebackground="red", command=lambda:panic_now())
+  panic = Button(body, text="PANIC",font=('',28,''), bg="#db0303", fg="black", activebackground="red", command=lambda:really_panic())
   panic.pack(side="bottom", fill='both',pady=5,padx=5)
   body.pack(fill="both")
   mainframe.pack(side='top',fill='both')
