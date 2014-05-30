@@ -124,14 +124,17 @@ def listenbcast():
   except:
     print("WARNING: FAILED TO BIND TO UDP SOCKET.")
 
-  while True:
-    result = select.select([s],[],[])
-    msg = result[0][0].recv(bufferSize)
-    if msg == correct_hash():
-      panic_now()
-      break
-    else:
-      print("Incorrect Signal Recieved: " + str(msg))
+    try:
+        while True:
+            result = select.select([s],[],[])
+            msg = result[0][0].recv(bufferSize)
+            if msg == correct_hash():
+              panic_now()
+              break
+            else:
+              print("Incorrect Signal Recieved: " + str(msg))
+    except (KeyboardInterrupt, SystemExit):
+        raise
 def broadcast_panic():
   msg = correct_hash
   s = socket.socket( socket.AF_INET, socket.SOCK_DGRAM )
