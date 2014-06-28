@@ -98,7 +98,7 @@ def panic_now():
         os.popen("sdmem -llf")
 
       if panic['screenlock'] == "1":
-        os.popen("gnome-screensaver-command -lock")
+        os.popen("xdg-screensaver lock")
 
       if panic["propogate"] == "1":
         broadcast_panic()
