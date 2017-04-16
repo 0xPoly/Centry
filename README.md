@@ -20,7 +20,7 @@ Centry is a panic button intended to protect users against [Cold Boot Attacks](h
 * Compatable with Linux and Mac OS; with significantly more security in Linux.
 
 ## Installation ##
-####Linux####
+#### Linux ####
 For significantly improved security install the `secure-delete` package. On Ubuntu/Debian:
 
      sudo apt-get install secure-delete
