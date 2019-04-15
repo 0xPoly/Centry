@@ -23,7 +23,6 @@ import select
 import csv
 import multiprocessing
 from tkinter import *
-import hashlib
 import datetime
 
 def configsave():
@@ -54,7 +53,7 @@ def toggle(option):
 def really_panic():
 	if panic['confirmation'] == "1":
 		toplevel = Toplevel()
-    
+
 		title = Label(toplevel, text="!PANIC!", font=('','16','')).pack()
 
 		separator = Frame(toplevel, height=2, bd=1, relief=SUNKEN)
@@ -91,10 +90,10 @@ def panic_now():
 
    elif os.name == 'posix':
     try:
-      if panic['truecrypt'] == "1":           
+      if panic['truecrypt'] == "1":
         os.popen("truecrypt /d /f /w /q /s")
-     
-      if panic['ram'] == "1":     
+
+      if panic['ram'] == "1":
         os.popen("sdmem -llf")
 
       if panic['screenlock'] == "1":
