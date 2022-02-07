@@ -22,6 +22,8 @@ Centry is a panic button intended to protect users against [Cold Boot Attacks](h
 ## Installation ##
 ####Linux####
 
+Install the secure-delete utility (won't be used to delete files on SSDs, no worries, it's gonna be used to wipe the RAM)
+
 Download and run Centry as root:
 
      git clone https://github.com/AnonymousPlanet/Centry.git
