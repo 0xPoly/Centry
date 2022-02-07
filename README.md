@@ -21,17 +21,14 @@ Centry is a panic button intended to protect users against [Cold Boot Attacks](h
 
 ## Installation ##
 ####Linux####
-For significantly improved security install the `secure-delete` package. On Ubuntu/Debian:
 
-     sudo apt-get install secure-delete
+Download and run Centry as root:
 
-Then download and run Centry as root:
-
-     git clone https://github.com/0xPoly/Centry.git
+     git clone https://github.com/AnonymousPlanet/Centry.git
      sudo python centry.py "password"
 
 ## Contributors and License ##
 
-- 0xPoly - [twitter](https://twitter.com/0xPoly)
+- The original author 0xPoly - [twitter](https://twitter.com/0xPoly), has vanished for years and it's pointless to contact them.
  
 This is a free open-source program distirbuted under the [GNU General Public License](/LICENSE). Comments, suggestions and pull requests are all heartily encouraged.
