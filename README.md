@@ -11,7 +11,7 @@ Centry is a panic button intended to protect users against [Cold Boot Attacks](h
 * User-friendly GUI interface
 * When in panic mode, Centry can:
   * Lock the screen
-  * Unmount all Truecrypt disks and clear the password/keyfile cache
+  * Unmount all Veracrypt disks and clear the password/keyfile cache
   * Write zeros to RAM using sdmem (on UNIX-like systems)
   * Force an ACPI shutdown (equivilent holding down the power button)
   * Propogate the panic signal to all other nodes in the network
@@ -21,17 +21,16 @@ Centry is a panic button intended to protect users against [Cold Boot Attacks](h
 
 ## Installation ##
 ####Linux####
-For significantly improved security install the `secure-delete` package. On Ubuntu/Debian:
 
-     sudo apt-get install secure-delete
+Install the secure-delete utility (won't be used to delete files on SSDs, no worries, it's gonna be used to wipe the RAM)
 
-Then download and run Centry as root:
+Download and run Centry as root:
 
-     git clone https://github.com/0xPoly/Centry.git
+     git clone https://github.com/AnonymousPlanet/Centry.git
      sudo python centry.py "password"
 
 ## Contributors and License ##
 
-- 0xPoly - [twitter](https://twitter.com/0xPoly)
+- The original author 0xPoly - [twitter](https://twitter.com/0xPoly), has vanished for years and it's pointless to contact them.
  
 This is a free open-source program distirbuted under the [GNU General Public License](/LICENSE). Comments, suggestions and pull requests are all heartily encouraged.

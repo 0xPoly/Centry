@@ -33,7 +33,7 @@ def configsave():
       panic[key] = val
     return panic
   else:
-    panic = {"screenlock":1,"passlock":1,"truecrypt":1,"ram":1,"swap":1,
+    panic = {"screenlock":1,"passlock":1,"veracrypt":1,"ram":1,"swap":1,
 "ecc":1,"hardshutdown":1,"propogate":1,"confirmation":0}
     w = csv.writer(open("centry.conf", "w"))
     for key, val in panic.items():
@@ -76,8 +76,8 @@ def really_panic():
 def panic_now():
    if os.name == 'nt':
     try:
-      if panic['truecrypt'] == "1":
-        os.popen("truecrypt.exe /d /f /w /q /s")
+      if panic['veracrypt'] == "1":
+        os.popen("veracrypt.exe /d /f /w /q /s")
 
       if panic['screenlock'] == "1":
         winpath = os.environ["windir"] # locks screen
@@ -91,8 +91,8 @@ def panic_now():
 
    elif os.name == 'posix':
     try:
-      if panic['truecrypt'] == "1":           
-        os.popen("truecrypt /d /f /w /q /s")
+      if panic['veracrypt'] == "1":           
+        os.popen("veracrypt /d /f /w /q /s")
      
       if panic['ram'] == "1":     
         os.popen("sdmem -llf")
@@ -154,7 +154,7 @@ def settingswindow():
                           font=('',10,'bold'))
     panic_heading.pack()
     global tc, ls, rm, sw, pw, ec, sd, co
-    tc = Button(toplevel,command=lambda:toggle("truecrypt"))
+    tc = Button(toplevel,command=lambda:toggle("veracrypt"))
     tc.pack(fill="both", padx=5, pady=2)
     ls = Button(toplevel,command=lambda:toggle("screenlock"))
     ls.pack(fill="both", padx=5, pady=2)
@@ -196,10 +196,10 @@ shutdown guarantee a quicker shutdown and should be used by more paranoid\
     update_settings()
 
 def update_settings():
-    if panic["truecrypt"] == "1":
-       tc.config(text="Lock Truecrypt Disks and Wipe Cache")
+    if panic["veracrypt"] == "1":
+       tc.config(text="Lock Veracrypt Disks and Wipe Cache")
     else:
-       tc.config(text="NOT Lock Truecrypt Disks or Wipe Cache")
+       tc.config(text="NOT Lock Veracrypt Disks or Wipe Cache")
     if panic["screenlock"] == "1":
        ls.config(text="Lock Screen")
     else:
